@@ -67,7 +67,7 @@
 <body>
     <h1>Ordina Vaniglia Nera</h1>
     <img src="https://raw.githubusercontent.com/Anto161062/vaniglia_nera/main/vaniglia_nera.png" alt="Profumo Vaniglia Nera" class="product-image">
-    <div class="order-section">
+     <div class="order-section">
         <div class="order-box">
             <p>200ml - 20.00€</p>
             <input type="number" id="quantity200" value="0" min="0" onchange="updateTotal()">
@@ -77,30 +77,52 @@
             <input type="number" id="quantity500" value="0" min="0" onchange="updateTotal()">
         </div>
     </div>
+    
     <p class="total" id="total">Totale: 0.00€</p>
+    
     <div class="cta">
-        <button onclick="sendOrder()">Invia Conferma Ordine</button>
+        <button onclick="sendOrder()">📩 Invia Conferma Ordine</button>
     </div>
+
     <script>
         function updateTotal() {
-            const quantity200 = document.getElementById("quantity200").value;
-            const quantity500 = document.getElementById("quantity500").value;
+            const quantity200 = parseInt(document.getElementById("quantity200").value) || 0;
+            const quantity500 = parseInt(document.getElementById("quantity500").value) || 0;
             const total = (quantity200 * 20 + quantity500 * 35).toFixed(2);
             document.getElementById("total").textContent = `Totale: ${total}€`;
         }
 
         function sendOrder() {
-            const quantity200 = document.getElementById("quantity200").value;
-            const quantity500 = document.getElementById("quantity500").value;
-            const total = (quantity200 * 20 + quantity500 * 35).toFixed(2);
-            
-            let message = "Ciao! Confermo ordine per Vaniglia Nera:\n";
-            if (quantity200 > 0) message += `- ${quantity200} x 200ml (20€)\n`;
-            if (quantity500 > 0) message += `- ${quantity500} x 500ml (35€)\n`;
-            message += `Totale: ${total}€`;
-            
-            const whatsappURL = `https://wa.me/393717771328?text=${encodeURIComponent(message)}`;
-            window.open(whatsappURL, "_blank");
+            const quantity200 = parseInt(document.getElementById("quantity200").value) || 0;
+            const quantity500 = parseInt(document.getElementById("quantity500").value) || 0;
+
+            if (quantity200 === 0 && quantity500 === 0) {
+                alert("⚠️ Seleziona almeno un prodotto prima di inviare l'ordine.");
+                return;
+            }
+
+            let message = `🟢 *ORDINE MYSENZA1* 🟢\n\n`;
+            message += `📌 *Ciao! Ecco il mio ordine:*\n\n`;
+
+            if (quantity200 > 0) {
+                message += `🔵 *Vaniglia Nera* 200ml × ${quantity200} = *${(quantity200 * 20).toFixed(2)}€*\n`;
+            }
+            if (quantity500 > 0) {
+                message += `🔵 *Vaniglia Nera* 500ml × ${quantity500} = *${(quantity500 * 35).toFixed(2)}€*\n`;
+            }
+
+            message += `------------------------------------\n`;
+            message += `🛍️ *TOTALE ORDINE:* *${(quantity200 * 20 + quantity500 * 35).toFixed(2)}€*\n`;
+            message += `------------------------------------\n\n`;
+            message += `📩 *Attendo conferma, grazie!* 🔝\n\n`;
+
+            // Apri WhatsApp con il messaggio precompilato
+            window.open(`https://wa.me/393717771328?text=${encodeURIComponent(message)}`, "_blank");
+
+            // Svuota i campi dopo l'invio
+            document.getElementById("quantity200").value = 0;
+            document.getElementById("quantity500").value = 0;
+            updateTotal();
         }
     </script>
 </body>
